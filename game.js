@@ -38,7 +38,7 @@ game = () => {
                 const elemLi = document.createElement('li');
                 elemLi.className = "container";
                 elemLi.className += " piece";
-                elemLi.setAttribute("draggable", "true");
+	        elemLi.setAttribute("onclick", "g.validateMovement("+i+", "+j+")");
     
                 const content = mat[i][j].content;
                 if ((i+1) == mat.length && (j+1) == mat.length)
@@ -50,6 +50,37 @@ game = () => {
     
         elemInteractArea.appendChild(elemUl);
     
+    }
+
+    validateMovement = (row, col) => {
+        if (mat[row][col].content != '') {
+            if (typeof mat[row][col+1] !== 'undefined') {
+                if(mat[row][col+1].content == '') {
+                    console.log('movement available');
+                }
+            }
+            if (typeof mat[row][col-1] !== 'undefined') {
+                if (mat[row][col-1].content == '') {
+                    console.log('movement available');
+                }
+            }
+            if (typeof mat[row+1] !== 'undefined') {
+                if(mat[row+1][col].content == '') {
+                    console.log('movement available');
+                }
+            }
+            if (typeof mat[row-1] !== 'undefined') {
+                if (mat[row-1][col].content == '') {
+                    console.log('movement available');
+                }
+            }
+        } else {
+            console.log('Not a piece');
+        }
+    }
+
+    getMat = () => {
+	    return mat;
     }
 
     init(); 
