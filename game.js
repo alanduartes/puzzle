@@ -30,6 +30,9 @@ game = () => {
     render = () => {
         const elemInteractArea = document.getElementsByClassName('interact-area')[0];
         const elemUl = document.createElement('ul');
+
+        elemInteractArea.innerHTML = '';
+
         elemUl.className = "container";
         elemInteractArea.className += " container";
     
@@ -38,10 +41,10 @@ game = () => {
                 const elemLi = document.createElement('li');
                 elemLi.className = "container";
                 elemLi.className += " piece";
-	        elemLi.setAttribute("onclick", "g.validateMovement("+i+", "+j+")");
+	            elemLi.setAttribute("onclick", "g.validateMovement("+i+", "+j+")");
     
                 const content = mat[i][j].content;
-                if ((i+1) == mat.length && (j+1) == mat.length)
+                if (content == '')
                     elemLi.className += " no-piece";
                 elemLi.appendChild(document.createTextNode(content));
                 elemUl.appendChild(elemLi);
@@ -56,27 +59,37 @@ game = () => {
         if (mat[row][col].content != '') {
             if (typeof mat[row][col+1] !== 'undefined') {
                 if(mat[row][col+1].content == '') {
+                    mat[row][col+1].content = mat[row][col].content;
+                    mat[row][col].content = '';
                     console.log('movement available');
                 }
             }
             if (typeof mat[row][col-1] !== 'undefined') {
                 if (mat[row][col-1].content == '') {
+                    mat[row][col-1].content = mat[row][col].content;
+                    mat[row][col].content = '';
                     console.log('movement available');
                 }
             }
             if (typeof mat[row+1] !== 'undefined') {
                 if(mat[row+1][col].content == '') {
+                    mat[row+1][col].content = mat[row][col].content;
+                    mat[row][col].content = '';
                     console.log('movement available');
                 }
             }
             if (typeof mat[row-1] !== 'undefined') {
                 if (mat[row-1][col].content == '') {
+                    mat[row-1][col].content = mat[row][col].content;
+                    mat[row][col].content = '';
                     console.log('movement available');
                 }
             }
         } else {
             console.log('Not a piece');
         }
+
+        render();
     }
 
     getMat = () => {
