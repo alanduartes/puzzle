@@ -1,7 +1,8 @@
 game = () => {
-    let solved = false;
-    let mat = [];    
-    const pieces = [
+    // TODO (make dynamic)
+    const WIDTH = 3;
+    const HEIGHT = 3;
+    const PIECES = [
         {'content' : '1'}, 
         {'content' : '2'}, 
         {'content' : '3'}, 
@@ -13,24 +14,29 @@ game = () => {
         {'content' : ''}
     ];
 
-    init = () => {
-        mat[0] = [];
-        mat[0][0] = pieces[0];
-        mat[0][1] = pieces[1];
-        mat[0][2] = pieces[2];
-        mat[1] = [];
-        mat[1][0] = pieces[3];
-        mat[1][1] = pieces[4];
-        mat[1][2] = pieces[5];
-        mat[2] = [];
-        mat[2][0] = pieces[6];
-        mat[2][1] = pieces[7];
-        mat[2][2] = pieces[8];
+    let mat = [];
 
-        // mat = shuffle(mat);
-        // while (isSolved()) {
-        //     mat = shuffle(mat);
-        // }
+    init = () => {
+        let shuffledPieces =  shuffle(PIECES);
+        let countIdx = 0;
+
+        for (let i = 0; i < WIDTH; i++) {
+            mat[i] = [];
+            for (let k = 0; k < HEIGHT; k++) {
+                mat[i][k] = shuffledPieces[countIdx++];
+            }
+        }
+        
+        // Don't let the system to create a solved puzzle
+        isSolved()
+            .then((solve) => {
+                let s = solve;
+                if (s) {
+                    init();
+                    render();
+                }    
+            });
+
     }
 
     /**
@@ -150,10 +156,6 @@ game = () => {
             if (solved) alert('Resolvido');
         });
         
-    }
-
-    getMat = () => {
-	    return mat;
     }
 
     init(); 
