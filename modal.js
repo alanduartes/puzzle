@@ -6,3 +6,7 @@ for (var i = 0; i < closeModal.length; i++) {
         modal.style.display = 'none';
     });
 }
+
+function openModal() {
+    modal.style.display = 'flex';
+}

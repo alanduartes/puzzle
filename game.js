@@ -29,13 +29,11 @@ game = () => {
         
         // Don't let the system to create a solved puzzle
         isSolved()
-            .then((solve) => {
-                let s = solve;
-                if (s) {
-                    init();
-                    render();
-                }    
-            });
+            .then((solved) => {
+                init();
+                render();
+            }, 
+            () => {});
 
     }
 
@@ -95,24 +93,26 @@ game = () => {
     }
 
     isSolved = () => {
-        let prevNum = 0;
-        let solved = true;
+       return new Promise((resolve, reject) => {
+            let prevNum = 0;
+            let solved = true;
 
-        for (let i = 0; i < mat.length; i++) {
-            for (let k = 0; k < mat.length; k++) {
-                if ((mat[i][k].content-1) != prevNum && mat[i][k].content != '') {
-                    solved = false;
-                    break;
+            for (let i = 0; i < mat.length; i++) {
+                for (let k = 0; k < mat.length; k++) {
+                    if ((mat[i][k].content-1) != prevNum && mat[i][k].content != '') {
+                        solved = false;
+                        break;
+                    }
+                    prevNum++;
                 }
-                prevNum++;
+
+                if (!solved) break;
             }
-
-            if (!solved) break;
-        }
-
-        return new Promise((resolve, reject) => 
-        {
-            resolve(solved);
+            
+            if (solved)
+                resolve(solved);
+            else
+                reject(solved);
         });
     }
 
@@ -151,10 +151,11 @@ game = () => {
         }
 
         render();
-        pSolved = isSolved();
-        pSolved.then((solved) => {
-            if (solved) alert('Resolvido');
-        });
+        isSolved()
+            .then((solved) => {
+                openModal();
+            },
+            () => {});
         
     }
 
