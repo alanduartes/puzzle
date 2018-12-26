@@ -5,7 +5,7 @@ import './index.css';
 function Piece(props)
 {
     return <div className={"piece container " + (props.value === "0" ? 'empty-piece' : '')}
-                onClick={props.handleClick}
+                onClick={props.onClick}
             >
                     {props.value}
             </div>;
@@ -13,29 +13,37 @@ function Piece(props)
 
 class PuzzleArea extends React.Component
 {
-    handleClick()
+    handleClick(i)
     {
-        alert('Handoulando o clique');
+        alert('Handoulando o clique ' + i);
+    }
+
+    renderPiece(idx)
+    {
+        return (<Piece 
+                    value={idx}
+                    onClick={() => this.handleClick(idx)}
+                />);
     }
 
     render()
     {
         return (
-            <div className="interact-area" onClick={this.handleClick}>
+            <div className="interact-area">
                 <div className="row container">
-                    <Piece value="0"/>
-                    <Piece value="1"/>
-                    <Piece value="2"/>
+                    {this.renderPiece(0)}
+                    {this.renderPiece(1)}
+                    {this.renderPiece(2)}
                 </div>
                 <div className="row container">
-                    <Piece value="3"/>
-                    <Piece value="4"/>
-                    <Piece value="5"/>
+                    {this.renderPiece(3)}
+                    {this.renderPiece(4)}
+                    {this.renderPiece(5)}
                 </div>
                 <div className="row container">
-                    <Piece value="6"/>
-                    <Piece value="7"/>
-                    <Piece value="8"/>
+                    {this.renderPiece(6)}
+                    {this.renderPiece(7)}
+                    {this.renderPiece(8)}
                 </div>
             </div>
         );
