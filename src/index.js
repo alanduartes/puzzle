@@ -4,7 +4,7 @@ import './index.css';
 
 function Piece(props)
 {
-    return <div className={"piece container " + (props.value === "0" ? 'empty-piece' : '')}
+    return <div className={"piece container " + (props.value === 0 ? 'empty-piece' : '')}
                 onClick={props.onClick}
             >
                     {props.value}
@@ -23,28 +23,33 @@ class PuzzleArea extends React.Component
         return (<Piece 
                     value={idx}
                     onClick={() => this.handleClick(idx)}
+                    key={idx}
                 />);
     }
 
     render()
     {
+        let row = [];
+
+        this.props.mat.forEach((value, k) => {
+            let pieces = [];
+            
+            for (let i = 0; i < value.length; i++) {
+                pieces.push(this.renderPiece(value[i]));    
+            }
+
+            row.push(
+                (
+                    <div className="row container" key={k}>
+                        { pieces }
+                    </div>
+                )
+            );
+        });
+
         return (
             <div className="interact-area">
-                <div className="row container">
-                    {this.renderPiece(0)}
-                    {this.renderPiece(1)}
-                    {this.renderPiece(2)}
-                </div>
-                <div className="row container">
-                    {this.renderPiece(3)}
-                    {this.renderPiece(4)}
-                    {this.renderPiece(5)}
-                </div>
-                <div className="row container">
-                    {this.renderPiece(6)}
-                    {this.renderPiece(7)}
-                    {this.renderPiece(8)}
-                </div>
+                { row }
             </div>
         );
     }
@@ -52,11 +57,40 @@ class PuzzleArea extends React.Component
 
 class Game extends React.Component
 {
+    constructor(props) {
+        super(props);
+        let mat = [];
+
+        mat = this.shuffle();
+        this.state = {mat: mat};
+    }
+
+    shuffle()
+    {
+        let sortedMat = [0,1,2,3,4,5,6,7,8];
+        let arr = [];
+
+        // Trick
+        for(var j, x, i = sortedMat.length; i; j = parseInt(Math.random() * i), x = sortedMat[--i], sortedMat[i] = sortedMat[j], sortedMat[j] = x);
+        
+        let count = 0;
+        for(let i = 0; i < 3; i++) {
+            arr[i] = [];
+            for (let j = 0; j < 3; j++) {
+                arr[i][j] = sortedMat[count];
+                count++;
+            }
+        }
+	    return arr;
+    }
+    
     render()
     {
         return (
             <div className="game">
-                <PuzzleArea />
+                <PuzzleArea 
+                    mat={this.state.mat}
+                />
             </div>
         );
     }
